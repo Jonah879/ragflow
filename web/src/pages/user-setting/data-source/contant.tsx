@@ -9,6 +9,7 @@ export enum DataSourceKey {
   NOTION = 'notion',
   DISCORD = 'discord',
   GOOGLE_DRIVE = 'google_drive',
+  WEBDAV = 'webdav',
   //   GMAIL = 'gmail',
   //   JIRA = 'jira',
   //   SHAREPOINT = 'sharepoint',
@@ -41,6 +42,11 @@ export const DataSourceInfo = {
     name: 'Google Drive',
     description: t(`setting.${DataSourceKey.GOOGLE_DRIVE}Description`),
     icon: <SvgIcon name={'data-source/google-drive'} width={38} />,
+  },
+  [DataSourceKey.WEBDAV]: {
+    name: 'WebDAV',
+    description: t(`setting.${DataSourceKey.WEBDAV}Description`),
+    icon: <SvgIcon name={'data-source/webdav'} width={38} />,
   },
 };
 
@@ -100,9 +106,17 @@ export const DataSourceFormFields = {
         { label: 'R2', value: 'r2' },
         { label: 'Google Cloud Storage', value: 'google_cloud_storage' },
         { label: 'OCI Storage', value: 'oci_storage' },
-        { label: 'Hetzner', value: 'hetzner' },
+        { label: 'S3 Compatible', value: 's3_compatible' },
       ],
       required: true,
+    },
+    {
+      label: 'Endpoint URL',
+      name: 'config.credentials.endpoint_url',
+      type: FormFieldType.Text,
+      required: false,
+      placeholder: 'https://fsn1.your-objectstorage.com',
+      tooltip: t('setting.S3CompatibleEndpointUrlTip'),
     },
     {
       label: 'Prefix',
@@ -271,6 +285,35 @@ export const DataSourceFormFields = {
       defaultValue: 'uploaded',
     },
   ],
+  [DataSourceKey.WEBDAV]: [
+    {
+      label: 'WebDAV Server URL',
+      name: 'config.base_url',
+      type: FormFieldType.Text,
+      required: true,
+      placeholder: 'https://webdav.example.com',
+    },
+    {
+      label: 'Username',
+      name: 'config.credentials.username',
+      type: FormFieldType.Text,
+      required: true,
+    },
+    {
+      label: 'Password',
+      name: 'config.credentials.password',
+      type: FormFieldType.Password,
+      required: true,
+    },
+    {
+      label: 'Remote Path',
+      name: 'config.remote_path',
+      type: FormFieldType.Text,
+      required: false,
+      placeholder: '/',
+      tooltip: t('setting.webdavRemotePathTip'),
+    },
+  ],
   // [DataSourceKey.GOOGLE_DRIVE]: [
   //   {
   //     label: 'Primary Admin Email',
@@ -379,6 +422,7 @@ export const DataSourceFormDefaultValues = {
       credentials: {
         aws_access_key_id: '',
         aws_secret_access_key: '',
+        endpoint_url: '',
       },
     },
   },
@@ -431,6 +475,18 @@ export const DataSourceFormDefaultValues = {
         google_primary_admin: '',
         google_tokens: '',
         authentication_method: 'uploaded',
+      },
+    },
+  },
+  [DataSourceKey.WEBDAV]: {
+    name: '',
+    source: DataSourceKey.WEBDAV,
+    config: {
+      base_url: '',
+      remote_path: '/',
+      credentials: {
+        username: '',
+        password: '',
       },
     },
   },

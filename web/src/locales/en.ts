@@ -705,6 +705,8 @@ This auto-tagging feature enhances retrieval by adding another layer of domain-s
         'The base URL of your Confluence instance (e.g., https://your-domain.atlassian.net/wiki)',
       s3PrefixTip: `Specify the folder path within your S3 bucket to fetch files from. 
 Example: general/v2/`,
+      S3CompatibleEndpointUrlTip: `Required for S3 compatible Storage Box. Specify the S3-compatible endpoint URL.
+Example: https://fsn1.your-objectstorage.com`,
       addDataSourceModalTital: 'Create your {{name}} connector',
       deleteSourceModalTitle: 'Delete data source',
       deleteSourceModalContent: `
@@ -724,6 +726,10 @@ Example: general/v2/`,
         'Sync pages and databases from Notion for knowledge retrieval.',
       google_driveDescription:
         'Connect your Google Drive via OAuth and sync specific folders or drives.',
+      webdavDescription:
+        'Connect to WebDAV servers (including Nextcloud, ownCloud) to sync files.',
+      webdavRemotePathTip:
+        'Optional: Specify a folder path on the WebDAV server (e.g., /Documents). Leave empty to sync from root.',
       google_driveTokenTip:
         'Upload the OAuth token JSON generated from the OAuth helper or Google Cloud Console. You may also upload a client_secret JSON from an "installed" or "web" application. If this is your first sync, a browser window will open to complete the OAuth consent. If the JSON already contains a refresh token, it will be reused automatically.',
       google_drivePrimaryAdminTip:

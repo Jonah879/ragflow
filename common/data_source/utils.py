@@ -294,13 +294,12 @@ def create_s3_client(bucket_type: BlobType, credentials: dict[str, Any], europea
             region_name=credentials["region"],
         )
     
-    elif bucket_type == BlobType.HETZNER:
+    elif bucket_type == BlobType.S3_COMPATIBLE:
         return boto3.client(
             "s3",
-            endpoint_url="https://nbg1.your-objectstorage.com",
+            endpoint_url=credentials["endpoint_url"],
             aws_access_key_id=credentials["aws_access_key_id"],
             aws_secret_access_key=credentials["aws_secret_access_key"],
-            region_name="nbg1",
         )
 
     else:

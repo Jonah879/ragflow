@@ -67,7 +67,7 @@ const SourceDetailPage = () => {
           <div className="flex items-center  gap-1 w-full relative">
             <Input {...fieldProps} type={FormFieldType.Number} />
             <span className="absolute right-0 -translate-x-[58px] text-text-secondary italic ">
-              minutes
+              seconds
             </span>
             <button
               type="button"

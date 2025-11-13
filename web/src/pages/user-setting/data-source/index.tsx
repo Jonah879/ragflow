@@ -44,6 +44,12 @@ const dataSourceTemplates = [
     description: DataSourceInfo[DataSourceKey.NOTION].description,
     icon: DataSourceInfo[DataSourceKey.NOTION].icon,
   },
+  {
+    id: DataSourceKey.WEBDAV,
+    name: DataSourceInfo[DataSourceKey.WEBDAV].name,
+    description: DataSourceInfo[DataSourceKey.WEBDAV].description,
+    icon: DataSourceInfo[DataSourceKey.WEBDAV].icon,
+  },
 ];
 const DataSource = () => {
   const { t } = useTranslation();

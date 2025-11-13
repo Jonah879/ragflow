@@ -87,12 +87,12 @@ class BlobStorageConnector(LoadConnector, PollConnector):
             ):
                 raise ConnectorMissingCredentialError("Oracle Cloud Infrastructure")
         
-        elif self.bucket_type == BlobType.HETZNER:
+        elif self.bucket_type == BlobType.S3_COMPATIBLE:
             if not all(
                 credentials.get(key)
-                for key in ["aws_access_key_id", "aws_secret_access_key"]
+                for key in ["endpoint_url", "aws_access_key_id", "aws_secret_access_key"]
             ):
-                raise ConnectorMissingCredentialError("Hetzner")
+                raise ConnectorMissingCredentialError("S3 Compatible Storage")
 
         else:
             raise ValueError(f"Unsupported bucket type: {self.bucket_type}")
