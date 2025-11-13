@@ -86,6 +86,13 @@ class BlobStorageConnector(LoadConnector, PollConnector):
                 for key in ["namespace", "region", "access_key_id", "secret_access_key"]
             ):
                 raise ConnectorMissingCredentialError("Oracle Cloud Infrastructure")
+        
+        elif self.bucket_type == BlobType.HETZNER:
+            if not all(
+                credentials.get(key)
+                for key in ["aws_access_key_id", "aws_secret_access_key"]
+            ):
+                raise ConnectorMissingCredentialError("Hetzner")
 
         else:
             raise ValueError(f"Unsupported bucket type: {self.bucket_type}")

@@ -100,6 +100,7 @@ export const DataSourceFormFields = {
         { label: 'R2', value: 'r2' },
         { label: 'Google Cloud Storage', value: 'google_cloud_storage' },
         { label: 'OCI Storage', value: 'oci_storage' },
+        { label: 'Hetzner', value: 'hetzner' },
       ],
       required: true,
     },
