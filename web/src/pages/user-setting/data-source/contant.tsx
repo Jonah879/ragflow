@@ -15,7 +15,7 @@ export enum DataSourceKey {
   JIRA = 'jira',
   WEBDAV = 'webdav',
   DROPBOX = 'dropbox',
-  //   SHAREPOINT = 'sharepoint',
+  SHAREPOINT = 'sharepoint',
   //   SLACK = 'slack',
   //   TEAMS = 'teams',
 }
@@ -70,6 +70,11 @@ export const DataSourceInfo = {
     name: 'Dropbox',
     description: t(`setting.${DataSourceKey.DROPBOX}Description`),
     icon: <SvgIcon name={'data-source/dropbox'} width={38} />,
+  },
+  [DataSourceKey.SHAREPOINT]: {
+    name: 'SharePoint',
+    description: t(`setting.${DataSourceKey.SHAREPOINT}Description`),
+    icon: <SvgIcon name={'data-source/sharepoint'} width={38} />,
   },
 };
 
@@ -525,6 +530,46 @@ export const DataSourceFormFields = {
       placeholder: 'Defaults to 2',
     },
   ],
+  [DataSourceKey.SHAREPOINT]: [
+    {
+      label: 'Tenant ID',
+      name: 'config.credentials.tenant_id',
+      type: FormFieldType.Text,
+      required: true,
+      placeholder: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+      tooltip: t('setting.sharepointTenantIdTip'),
+    },
+    {
+      label: 'Client ID',
+      name: 'config.credentials.client_id',
+      type: FormFieldType.Text,
+      required: true,
+      placeholder: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+      tooltip: t('setting.sharepointClientIdTip'),
+    },
+    {
+      label: 'Client Secret',
+      name: 'config.credentials.client_secret',
+      type: FormFieldType.Password,
+      required: true,
+      tooltip: t('setting.sharepointClientSecretTip'),
+    },
+    {
+      label: 'Site URL',
+      name: 'config.credentials.site_url',
+      type: FormFieldType.Text,
+      required: true,
+      placeholder: 'https://yourtenant.sharepoint.com/sites/yoursite',
+      tooltip: t('setting.sharepointSiteUrlTip'),
+    },
+    {
+      label: 'Batch Size',
+      name: 'config.batch_size',
+      type: FormFieldType.Number,
+      required: false,
+      placeholder: 'Defaults to 2',
+    },
+  ],
 };
 
 export const DataSourceFormDefaultValues = {
@@ -657,6 +702,19 @@ export const DataSourceFormDefaultValues = {
       batch_size: 2,
       credentials: {
         dropbox_access_token: '',
+      },
+    },
+  },
+  [DataSourceKey.SHAREPOINT]: {
+    name: '',
+    source: DataSourceKey.SHAREPOINT,
+    config: {
+      batch_size: 2,
+      credentials: {
+        tenant_id: '',
+        client_id: '',
+        client_secret: '',
+        site_url: '',
       },
     },
   },

@@ -37,7 +37,7 @@ from api.db.services.connector_service import ConnectorService, SyncLogsService
 from api.db.services.knowledgebase_service import KnowledgebaseService
 from common import settings
 from common.config_utils import show_configs
-from common.data_source import BlobStorageConnector, NotionConnector, DiscordConnector, GoogleDriveConnector, MoodleConnector, JiraConnector, DropboxConnector, WebDAVConnector
+from common.data_source import BlobStorageConnector, NotionConnector, DiscordConnector, GoogleDriveConnector, MoodleConnector, JiraConnector, DropboxConnector, WebDAVConnector, SharePointConnector
 from common.constants import FileSource, TaskStatus
 from common.data_source.config import INDEX_BATCH_SIZE
 from common.data_source.confluence_connector import ConfluenceConnector
@@ -501,8 +501,82 @@ class Jira(SyncBase):
 class SharePoint(SyncBase):
     SOURCE_NAME: str = FileSource.SHAREPOINT
 
+    def _get_source_prefix(self):
+        return "[SharePoint]"
+
     async def _generate(self, task: dict):
-        pass
+        connector_kwargs = {
+            "batch_size": self.conf.get("batch_size", INDEX_BATCH_SIZE),
+        }
+
+        self.connector = SharePointConnector(**connector_kwargs)
+
+        credentials = self.conf.get("credentials")
+        if not credentials:
+            raise ValueError("SharePoint connector is missing credentials.")
+
+        new_credentials = self.connector.load_credentials(credentials)
+        if new_credentials:
+            self._persist_rotated_credentials(task["connector_id"], new_credentials)
+
+        if task["reindex"] == "1" or not task["poll_range_start"]:
+            start_time = 0.0
+            begin_info = "totally"
+        else:
+            start_time = task["poll_range_start"].timestamp()
+            begin_info = f"from {task['poll_range_start']}"
+
+        end_time = datetime.now(timezone.utc).timestamp()
+        raw_batch_size = self.conf.get("sync_batch_size") or self.conf.get("batch_size") or INDEX_BATCH_SIZE
+        try:
+            batch_size = int(raw_batch_size)
+        except (TypeError, ValueError):
+            batch_size = INDEX_BATCH_SIZE
+        if batch_size <= 0:
+            batch_size = INDEX_BATCH_SIZE
+
+        def document_batches():
+            checkpoint = self.connector.build_dummy_checkpoint()
+            pending_docs = []
+            iterations = 0
+            iteration_limit = 100_000
+
+            while checkpoint.has_more:
+                wrapper = CheckpointOutputWrapper()
+                doc_generator = wrapper(self.connector.load_from_checkpoint(start_time, end_time, checkpoint))
+                for document, failure, next_checkpoint in doc_generator:
+                    if failure is not None:
+                        logging.warning(f"[SharePoint] SharePoint connector failure: {getattr(failure, 'failure_message', failure)}")
+                        continue
+                    if document is not None:
+                        pending_docs.append(document)
+                        if len(pending_docs) >= batch_size:
+                            yield pending_docs
+                            pending_docs = []
+                    if next_checkpoint is not None:
+                        checkpoint = next_checkpoint
+
+                iterations += 1
+                if iterations > iteration_limit:
+                    logging.error(f"[SharePoint] Task {task.get('id')} exceeded iteration limit ({iteration_limit}).")
+                    raise RuntimeError("Too many iterations while loading SharePoint documents.")
+
+            if pending_docs:
+                yield pending_docs
+
+        site_url = self.conf.get("credentials", {}).get("site_url", "unknown")
+        logging.info(f"[SharePoint] Connect to SharePoint {site_url} {begin_info}")
+        return document_batches()
+
+    def _persist_rotated_credentials(self, connector_id: str, credentials: dict[str, Any]) -> None:
+        try:
+            updated_conf = copy.deepcopy(self.conf)
+            updated_conf["credentials"] = credentials
+            ConnectorService.update_by_id(connector_id, {"config": updated_conf})
+            self.conf = updated_conf
+            logging.info("[SharePoint] Persisted refreshed SharePoint credentials for connector %s", connector_id)
+        except Exception:
+            logging.exception("[SharePoint] Failed to persist refreshed SharePoint credentials for connector %s", connector_id)
 
 
 class Slack(SyncBase):

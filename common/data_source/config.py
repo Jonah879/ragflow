@@ -52,6 +52,7 @@ class DocumentSource(str, Enum):
     MOODLE = "moodle"
     S3_COMPATIBLE = "s3_compatible"
     DROPBOX = "dropbox"
+    SHAREPOINT = "sharepoint"
 
 
 class FileOrigin(str, Enum):

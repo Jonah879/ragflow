@@ -735,6 +735,14 @@ General：实体和关系提取提示来自 GitHub - microsoft/graphrag：基于
       dropboxDescription: '连接 Dropbox，同步指定账号下的文件与文件夹。',
       dropboxAccessTokenTip:
         '请在 Dropbox App Console 生成 Access Token，并勾选 files.metadata.read、files.content.read、sharing.read 等必要权限。',
+      sharepointDescription:
+        '连接 Microsoft SharePoint，同步 SharePoint 站点中的文档和文件。',
+      sharepointTenantIdTip:
+        '您的 Microsoft 365 租户 ID（可在 Azure AD 中找到）。示例：xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+      sharepointClientIdTip: 'Azure AD 应用注册中的应用程序（客户端）ID。',
+      sharepointClientSecretTip: '在 Azure AD 应用注册中生成的客户端密钥。',
+      sharepointSiteUrlTip:
+        'SharePoint 站点的完整 URL（例如：https://yourtenant.sharepoint.com/sites/yoursite）。',
       jiraDescription: '接入 Jira 工作区，持续同步Issues、评论与附件。',
       jiraBaseUrlTip:
         'Jira 的 Base URL，例如：https://your-domain.atlassian.net。',

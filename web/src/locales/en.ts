@@ -761,6 +761,16 @@ Example: Virtual Hosted Style`,
         'Connect your Dropbox to sync files and folders from a chosen account.',
       dropboxAccessTokenTip:
         'Generate a long-lived access token in the Dropbox App Console with files.metadata.read, files.content.read, and sharing.read scopes.',
+      sharepointDescription:
+        'Connect your Microsoft SharePoint to sync documents and files from SharePoint sites.',
+      sharepointTenantIdTip:
+        'Your Microsoft 365 Tenant ID (found in Azure AD). Example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+      sharepointClientIdTip:
+        'Application (client) ID from Azure AD app registration.',
+      sharepointClientSecretTip:
+        'Client secret generated in your Azure AD app registration.',
+      sharepointSiteUrlTip:
+        'The full URL of your SharePoint site (e.g., https://yourtenant.sharepoint.com/sites/yoursite).',
       moodleDescription:
         'Connect to your Moodle LMS to sync course content, forums, and resources.',
       moodleUrlTip:
